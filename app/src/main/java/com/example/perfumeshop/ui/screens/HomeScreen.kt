@@ -67,3 +67,14 @@ fun HomeContent(
         }
     }
 }
+
+@Preview(showBackground = true)
+@Composable
+fun HomeContentPreview() {
+    PerfumeShopTheme {
+        HomeContent(
+            perfumes = PerfumeData.perfumes,
+            onPerfumeClick = {}
+        )
+    }
+}
