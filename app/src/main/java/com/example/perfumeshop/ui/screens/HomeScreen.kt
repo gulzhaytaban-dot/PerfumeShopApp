@@ -51,6 +51,14 @@ fun HomeContent(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
+        item(span = { GridItemSpan(maxLineSpan) }) {
+            Text(
+                text = "Perfume Shop",
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Bold
+            )
+        }
+
         items(perfumes, key = { it.id }) { perfume ->
             PerfumeCard(
                 perfume = perfume,
