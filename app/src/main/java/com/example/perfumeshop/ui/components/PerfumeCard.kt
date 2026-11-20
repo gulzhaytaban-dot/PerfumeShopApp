@@ -27,9 +27,11 @@ import com.example.perfumeshop.ui.theme.PerfumeShopTheme
 @Composable
 fun PerfumeCard(
     perfume: Perfume,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
+        onClick = onClick,
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
