@@ -26,6 +26,22 @@ import com.example.perfumeshop.viewmodel.PerfumeViewModel
 @Composable
 fun HomeScreen(
     onPerfumeClick: (Int) -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: PerfumeViewModel = viewModel()
+) {
+    val perfumes by viewModel.perfumes.collectAsState()
+
+    HomeContent(
+        perfumes = perfumes,
+        onPerfumeClick = onPerfumeClick,
+        modifier = modifier
+    )
+}
+
+@Composable
+fun HomeContent(
+    perfumes: List<Perfume>,
+    onPerfumeClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyVerticalGrid(
@@ -35,7 +51,7 @@ fun HomeScreen(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        items(PerfumeData.perfumes, key = { it.id }) { perfume ->
+        items(perfumes, key = { it.id }) { perfume ->
             PerfumeCard(
                 perfume = perfume,
                 onClick = { onPerfumeClick(perfume.id) }
