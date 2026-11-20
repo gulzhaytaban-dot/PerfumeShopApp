@@ -39,7 +39,11 @@ fun PerfumeCard(
                     .aspectRatio(1f),
                 contentScale = ContentScale.Crop
             )
-            Text(text = perfume.name, modifier = Modifier.padding(12.dp))
+            Column(modifier = Modifier.padding(12.dp)) {
+                Text(text = perfume.name)
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(text = perfume.formattedPrice())
+            }
         }
     }
 }
