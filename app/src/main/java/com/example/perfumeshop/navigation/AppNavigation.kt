@@ -149,5 +149,14 @@ fun DetailScreen(
         IconButton(onClick = onBack) {
             Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
         }
+
+        if (perfume == null) {
+            Text("Perfume not found", modifier = Modifier.padding(16.dp))
+            return@Column
+        }
+
+        Column(modifier = Modifier.padding(16.dp).verticalScroll(rememberScrollState())) {
+            Text(text = perfume.name, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+        }
     }
 }
