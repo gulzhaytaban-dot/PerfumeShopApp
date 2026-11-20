@@ -1,9 +1,12 @@
 package com.example.perfumeshop.data
 
+import androidx.annotation.DrawableRes
+
 data class Perfume(
     val id: Int,
     val name: String,
     val price: Double,
     val notes: String,
-    val volumeMl: Int
+    val volumeMl: Int,
+    @DrawableRes val imageRes: Int
 )
