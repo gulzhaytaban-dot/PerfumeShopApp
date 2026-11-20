@@ -1,13 +1,4 @@
 package com.example.perfumeshop.navigation
-}
-    }
-
-}
-    }
-}
-    }
-}
-package com.example.perfumeshop.navigation
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -143,7 +134,8 @@ fun DetailScreen(
     onBack: () -> Unit,
     onAddToCart: (Perfume) -> Unit,
     modifier: Modifier = Modifier
-) {    val perfume = viewModel.getPerfumeById(perfumeId)
+) {
+    val perfume = viewModel.getPerfumeById(perfumeId)
 
     Column(modifier = modifier.fillMaxSize()) {
         IconButton(onClick = onBack) {
@@ -184,6 +176,13 @@ fun DetailScreen(
             Text("Volume: ${perfume.volumeMl} ml", style = MaterialTheme.typography.bodyMedium)
             Spacer(Modifier.height(8.dp))
             Text("Notes: ${perfume.notes}", style = MaterialTheme.typography.bodyMedium)
+            Spacer(Modifier.height(24.dp))
+            Button(
+                onClick = { onAddToCart(perfume) },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Add to cart")
+            }
         }
     }
 }
