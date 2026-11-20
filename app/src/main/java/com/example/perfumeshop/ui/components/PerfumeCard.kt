@@ -63,3 +63,14 @@ fun PerfumeCard(
         }
     }
 }
+@Preview(showBackground = true)
+@Composable
+fun PerfumeCardPreview() {
+    PerfumeShopTheme {
+        PerfumeCard(
+            perfume = PerfumeData.perfumes.first(),
+            onClick = {},
+            modifier = Modifier.padding(16.dp)
+        )
+    }
+}
