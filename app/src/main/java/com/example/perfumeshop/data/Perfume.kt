@@ -1,6 +1,8 @@
 package com.example.perfumeshop.data
 
 import androidx.annotation.DrawableRes
+import java.text.NumberFormat
+import java.util.Locale
 
 data class Perfume(
     val id: Int,
@@ -9,4 +11,9 @@ data class Perfume(
     val notes: String,
     val volumeMl: Int,
     @DrawableRes val imageRes: Int
-)
+) {
+    fun formattedPrice(): String {
+        val format = NumberFormat.getIntegerInstance(Locale.forLanguageTag("ru-KZ"))
+        return "${format.format(price)} ₸"
+    }
+}
