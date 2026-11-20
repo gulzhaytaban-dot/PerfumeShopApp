@@ -11,4 +11,8 @@ class PerfumeViewModel : ViewModel() {
 
     private val _perfumes = MutableStateFlow(PerfumeData.perfumes)
     val perfumes: StateFlow<List<Perfume>> = _perfumes.asStateFlow()
+
+    fun getPerfumeById(id: Int): Perfume? {
+        return _perfumes.value.find { it.id == id }
+    }
 }
