@@ -14,6 +14,8 @@ A shopping app for one category: perfume. Users can browse perfumes, view detail
 - Favorites / cart screen
 - MVVM architecture with ViewModel + StateFlow
 - Navigation Compose
+- Home screen: 2-column grid of perfume cards (PerfumeCard, HomeScreen) with data from PerfumeViewModel (StateFlow)
+
 
 ## Tech
 Kotlin, Jetpack Compose, MVVM, Navigation Compose
