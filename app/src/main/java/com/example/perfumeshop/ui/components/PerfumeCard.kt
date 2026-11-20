@@ -29,7 +29,11 @@ fun PerfumeCard(
     perfume: Perfume,
     modifier: Modifier = Modifier
 ) {
-    Card(modifier = modifier.fillMaxWidth()) {
+    Card(
+        modifier = modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    ) {
         Column {
             Image(
                 painter = painterResource(perfume.imageRes),
@@ -40,9 +44,19 @@ fun PerfumeCard(
                 contentScale = ContentScale.Crop
             )
             Column(modifier = Modifier.padding(12.dp)) {
-                Text(text = perfume.name)
+                Text(
+                    text = perfume.name,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
                 Spacer(modifier = Modifier.height(4.dp))
-                Text(text = perfume.formattedPrice())
+                Text(
+                    text = perfume.formattedPrice(),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.primary
+                )
             }
         }
     }
