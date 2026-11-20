@@ -30,6 +30,16 @@ fun PerfumeCard(
     modifier: Modifier = Modifier
 ) {
     Card(modifier = modifier.fillMaxWidth()) {
-        Text(text = perfume.name, modifier = Modifier.padding(12.dp))
+        Column {
+            Image(
+                painter = painterResource(perfume.imageRes),
+                contentDescription = perfume.name,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(1f),
+                contentScale = ContentScale.Crop
+            )
+            Text(text = perfume.name, modifier = Modifier.padding(12.dp))
+        }
     }
 }
