@@ -4,7 +4,7 @@ A shopping app for one category: perfume. Users can browse perfumes, view detail
 
 ## Group Members
 - Ahemeili Nuerjuma
-- (name)
+- Aisha Zholdybayeva
 - (name)
 - (name)
 
