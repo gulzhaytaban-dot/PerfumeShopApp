@@ -155,8 +155,35 @@ fun DetailScreen(
             return@Column
         }
 
-        Column(modifier = Modifier.padding(16.dp).verticalScroll(rememberScrollState())) {
-            Text(text = perfume.name, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+        Column(
+            modifier = Modifier
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState())
+        ) {
+            Image(
+                painter = painterResource(perfume.imageRes),
+                contentDescription = perfume.name,
+                contentScale = ContentScale.Fit,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(300.dp)
+            )
+            Spacer(Modifier.height(16.dp))
+            Text(
+                text = perfume.name,
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(Modifier.height(8.dp))
+            Text(
+                text = perfume.formattedPrice(),
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.primary
+            )
+            Spacer(Modifier.height(8.dp))
+            Text("Volume: ${perfume.volumeMl} ml", style = MaterialTheme.typography.bodyMedium)
+            Spacer(Modifier.height(8.dp))
+            Text("Notes: ${perfume.notes}", style = MaterialTheme.typography.bodyMedium)
         }
     }
 }
