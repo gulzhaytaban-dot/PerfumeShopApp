@@ -35,13 +35,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import android.widget.Toast
-import androidx.compose.ui.platform.LocalContext
-import com.example.perfumeshop.data.Perfume
 import com.example.perfumeshop.ui.screens.HomeScreen
 import com.example.perfumeshop.viewmodel.PerfumeViewModel
 
-// ---------- Routes ----------
+// Routes
 object Routes {
     const val HOME = "home"
     const val CART = "cart"
@@ -49,13 +46,12 @@ object Routes {
     fun detail(id: Int) = "detail/$id"
 }
 
-// ---------- NavHost + bottom bar ----------
+//  NavHost + bottom bar
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
     // Created above the NavHost so every screen shares the same instance
     val perfumeVm: PerfumeViewModel = viewModel()
-    val context = LocalContext.current
 
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
@@ -115,24 +111,19 @@ fun AppNavigation() {
                 DetailScreen(
                     perfumeId = perfumeId,
                     viewModel = perfumeVm,
-                    onBack = { navController.popBackStack() },
-                    onAddToCart = { perfume ->
-                        // TODO: replace with cartVm.addToCart(perfume) once CartViewModel exists
-                        Toast.makeText(context, "${perfume.name} added to cart", Toast.LENGTH_SHORT).show()
-                    }
+                    onBack = { navController.popBackStack() }
                 )
             }
         }
     }
 }
 
-// ---------- Detail screen ----------
+//  Detail screen
 @Composable
 fun DetailScreen(
     perfumeId: Int,
     viewModel: PerfumeViewModel,
     onBack: () -> Unit,
-    onAddToCart: (Perfume) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val perfume = viewModel.getPerfumeById(perfumeId)
@@ -178,7 +169,7 @@ fun DetailScreen(
             Text("Notes: ${perfume.notes}", style = MaterialTheme.typography.bodyMedium)
             Spacer(Modifier.height(24.dp))
             Button(
-                onClick = { onAddToCart(perfume) },
+                onClick = { /* TODO: CartViewModel.addToCart(perfume) once the 4th member pushes it */ },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Add to cart")
