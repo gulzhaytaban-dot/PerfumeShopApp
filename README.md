@@ -6,7 +6,7 @@ A shopping app for one category: perfume. Users can browse perfumes, view detail
 - Ahemeili Nuerjuma
 - Aisha Zholdybayeva
 - Talshyn Altynbekkyzy
-- (name)
+- Lashyn
 
 ## Main Features
 - Perfume list with search
