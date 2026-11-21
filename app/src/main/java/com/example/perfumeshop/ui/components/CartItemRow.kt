@@ -34,6 +34,8 @@ import com.example.perfumeshop.util.formatPrice
 @Composable
 fun CartItemRow(
     item: CartItem,
+    onIncrease: () -> Unit,
+    onDecrease: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -67,7 +69,26 @@ fun CartItemRow(
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.primary
                 )
+                Spacer(modifier = Modifier.height(8.dp))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    IconButton(onClick = onDecrease) {
+                        Text(text = "-", style = MaterialTheme.typography.titleLarge)
+                    }
+                    Text(
+                        text = item.quantity.toString(),
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+                    IconButton(onClick = onIncrease) {
+                        Text(text = "+", style = MaterialTheme.typography.titleLarge)
+                    }
+                }
             }
+            Text(
+                text = formatPrice(item.totalPrice),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
         }
     }
 }
