@@ -26,4 +26,29 @@ class CartViewModel : ViewModel() {
             state.copy(items = newItems)
         }
     }
+
+
+    fun increaseQuantity(perfumeId: Int) {
+        _uiState.update { state ->
+            state.copy(
+                items = state.items.map {
+                    if (it.perfume.id == perfumeId) it.copy(quantity = it.quantity + 1) else it
+                }
+            )
+        }
+    }
+
+    fun decreaseQuantity(perfumeId: Int) {
+        _uiState.update { state ->
+            state.copy(
+                items = state.items.mapNotNull {
+                    when {
+                        it.perfume.id != perfumeId -> it
+                        it.quantity > 1 -> it.copy(quantity = it.quantity - 1)
+                        else -> null
+                    }
+                }
+            )
+        }
+    }
 }
