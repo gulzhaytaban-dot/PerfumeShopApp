@@ -96,3 +96,37 @@ fun CartContent(
         }
     }
 }
+
+
+@Preview(showBackground = true)
+@Composable
+fun CartContentPreview() {
+    PerfumeShopTheme {
+        CartContent(
+            uiState = CartUiState(
+                items = listOf(
+                    CartItem(perfume = PerfumeData.perfumes[0], quantity = 2),
+                    CartItem(perfume = PerfumeData.perfumes[1], quantity = 1)
+                )
+            ),
+            onIncrease = {},
+            onDecrease = {},
+            onRemove = {},
+            onClear = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CartContentEmptyPreview() {
+    PerfumeShopTheme {
+        CartContent(
+            uiState = CartUiState(),
+            onIncrease = {},
+            onDecrease = {},
+            onRemove = {},
+            onClear = {}
+        )
+    }
+}
