@@ -61,24 +61,38 @@ fun CartContent(
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(12.dp)
         )
-        LazyColumn(
-            modifier = Modifier.weight(1f),
-            contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            items(uiState.items, key = { it.perfume.id }) { item ->
-                CartItemRow(
-                    item = item,
-                    onIncrease = { onIncrease(item.perfume.id) },
-                    onDecrease = { onDecrease(item.perfume.id) },
-                    onRemove = { onRemove(item.perfume.id) }
+        if (uiState.isEmpty) {
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "Your cart is empty",
+                    style = MaterialTheme.typography.bodyLarge
                 )
             }
+        } else {
+            LazyColumn(
+                modifier = Modifier.weight(1f),
+                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                items(uiState.items, key = { it.perfume.id }) { item ->
+                    CartItemRow(
+                        item = item,
+                        onIncrease = { onIncrease(item.perfume.id) },
+                        onDecrease = { onDecrease(item.perfume.id) },
+                        onRemove = { onRemove(item.perfume.id) }
+                    )
+                }
+            }
+            CartSummary(
+                totalPrice = uiState.totalPrice,
+                totalCount = uiState.totalCount,
+                onClear = onClear
+            )
         }
-        CartSummary(
-            totalPrice = uiState.totalPrice,
-            totalCount = uiState.totalCount,
-            onClear = onClear
-        )
     }
 }
