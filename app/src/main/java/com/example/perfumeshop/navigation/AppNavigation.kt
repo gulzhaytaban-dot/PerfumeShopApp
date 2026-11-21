@@ -37,6 +37,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.perfumeshop.ui.screens.HomeScreen
 import com.example.perfumeshop.viewmodel.PerfumeViewModel
+import com.example.perfumeshop.ui.screens.CartScreen
+import com.example.perfumeshop.viewmodel.CartViewModel
 
 // Routes
 object Routes {
@@ -52,6 +54,7 @@ fun AppNavigation() {
     val navController = rememberNavController()
     // Created above the NavHost so every screen shares the same instance
     val perfumeVm: PerfumeViewModel = viewModel()
+    val cartVm: CartViewModel = viewModel()
 
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
@@ -99,8 +102,9 @@ fun AppNavigation() {
             }
 
             composable(Routes.CART) {
-                // TODO: replace with CartScreen() once the 4th member pushes it
-                Text("Cart", modifier = Modifier.padding(16.dp))
+                CartScreen(
+                    cartViewModel = cartVm
+                )
             }
 
             composable(
@@ -111,7 +115,12 @@ fun AppNavigation() {
                 DetailScreen(
                     perfumeId = perfumeId,
                     viewModel = perfumeVm,
-                    onBack = { navController.popBackStack() }
+                    onBack = { navController.popBackStack() },
+                    onAddToCart = {
+                        perfumeVm.getPerfumeById(perfumeId)?.let { perfume ->
+                            cartVm.addToCart(perfume)
+                        }
+                    }
                 )
             }
         }
@@ -124,8 +133,9 @@ fun DetailScreen(
     perfumeId: Int,
     viewModel: PerfumeViewModel,
     onBack: () -> Unit,
+    onAddToCart: () -> Unit,
     modifier: Modifier = Modifier
-) {
+){
     val perfume = viewModel.getPerfumeById(perfumeId)
 
     Column(modifier = modifier.fillMaxSize()) {
@@ -169,7 +179,7 @@ fun DetailScreen(
             Text("Notes: ${perfume.notes}", style = MaterialTheme.typography.bodyMedium)
             Spacer(Modifier.height(24.dp))
             Button(
-                onClick = { /* TODO: CartViewModel.addToCart(perfume) once the 4th member pushes it */ },
+                onClick = onAddToCart,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Add to cart")
