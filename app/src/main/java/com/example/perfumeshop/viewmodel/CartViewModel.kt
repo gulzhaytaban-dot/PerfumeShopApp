@@ -51,4 +51,15 @@ class CartViewModel : ViewModel() {
             )
         }
     }
+
+
+    fun removeFromCart(perfumeId: Int) {
+        _uiState.update { state ->
+            state.copy(items = state.items.filterNot { it.perfume.id == perfumeId })
+        }
+    }
+
+    fun clearCart() {
+        _uiState.value = CartUiState()
+    }
 }
