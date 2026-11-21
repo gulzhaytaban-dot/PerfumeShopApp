@@ -36,11 +36,13 @@ fun CartItemRow(
     item: CartItem,
     onIncrease: () -> Unit,
     onDecrease: () -> Unit,
+    onRemove: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp)
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Row(
             modifier = Modifier.padding(12.dp),
@@ -84,11 +86,30 @@ fun CartItemRow(
                     }
                 }
             }
-            Text(
-                text = formatPrice(item.totalPrice),
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
-            )
+            Column(horizontalAlignment = Alignment.End) {
+                Text(
+                    text = formatPrice(item.totalPrice),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold
+                )
+                TextButton(onClick = onRemove) {
+                    Text(text = "Remove")
+                }
+            }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CartItemRowPreview() {
+    PerfumeShopTheme {
+        CartItemRow(
+            item = CartItem(perfume = PerfumeData.perfumes.first(), quantity = 2),
+            onIncrease = {},
+            onDecrease = {},
+            onRemove = {},
+            modifier = Modifier.padding(16.dp)
+        )
     }
 }
