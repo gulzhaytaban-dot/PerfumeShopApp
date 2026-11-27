@@ -11,10 +11,14 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 class CartViewModel(
     private val repository: CartRepository
 ) : ViewModel() {
+
+    private val cartWriteMutex = Mutex()
 
     val uiState: StateFlow<CartUiState> = repository.items
         .map { items -> CartUiState(items = items) }
@@ -46,7 +50,7 @@ class CartViewModel(
 
     private fun updateCart(action: suspend () -> Unit) {
         viewModelScope.launch {
-            action()
+            cartWriteMutex.withLock { action() }
         }
     }
 
