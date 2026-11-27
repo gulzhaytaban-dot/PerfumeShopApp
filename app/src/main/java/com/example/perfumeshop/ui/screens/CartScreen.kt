@@ -4,12 +4,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -30,12 +32,16 @@ import com.example.perfumeshop.viewmodel.CartViewModel
 
 @Composable
 fun CartScreen(
+    darkMode: Boolean,
+    onDarkModeChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
-    cartViewModel: CartViewModel = viewModel()
+    cartViewModel: CartViewModel
 ) {
     val uiState by cartViewModel.uiState.collectAsState()
 
     CartContent(
+        darkMode = darkMode,
+        onDarkModeChange = onDarkModeChange,
         uiState = uiState,
         onIncrease = cartViewModel::increaseQuantity,
         onDecrease = cartViewModel::decreaseQuantity,
@@ -47,6 +53,8 @@ fun CartScreen(
 
 @Composable
 fun CartContent(
+    darkMode: Boolean,
+    onDarkModeChange: (Boolean) -> Unit,
     uiState: CartUiState,
     onIncrease: (Int) -> Unit,
     onDecrease: (Int) -> Unit,
@@ -61,6 +69,21 @@ fun CartContent(
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(12.dp)
         )
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(text = "Dark mode")
+            Switch(
+                checked = darkMode,
+                onCheckedChange = onDarkModeChange
+            )
+        }
+
         if (uiState.isEmpty) {
             Box(
                 modifier = Modifier
@@ -76,7 +99,10 @@ fun CartContent(
         } else {
             LazyColumn(
                 modifier = Modifier.weight(1f),
-                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
+                contentPadding = PaddingValues(
+                    horizontal = 12.dp,
+                    vertical = 4.dp
+                ),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 items(uiState.items, key = { it.perfume.id }) { item ->
@@ -88,6 +114,7 @@ fun CartContent(
                     )
                 }
             }
+
             CartSummary(
                 totalPrice = uiState.totalPrice,
                 totalCount = uiState.totalCount,
@@ -97,12 +124,13 @@ fun CartContent(
     }
 }
 
-
 @Preview(showBackground = true)
 @Composable
 fun CartContentPreview() {
     PerfumeShopTheme {
         CartContent(
+            darkMode = false,
+            onDarkModeChange = {},
             uiState = CartUiState(
                 items = listOf(
                     CartItem(perfume = PerfumeData.perfumes[0], quantity = 2),
@@ -122,6 +150,8 @@ fun CartContentPreview() {
 fun CartContentEmptyPreview() {
     PerfumeShopTheme {
         CartContent(
+            darkMode = false,
+            onDarkModeChange = {},
             uiState = CartUiState(),
             onIncrease = {},
             onDecrease = {},
