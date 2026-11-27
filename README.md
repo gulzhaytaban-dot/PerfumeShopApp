@@ -16,6 +16,7 @@ A shopping app for one category: perfume. Users can browse perfumes, view detail
 - Navigation Compose
 - Home screen: 2-column grid of perfume cards (PerfumeCard, HomeScreen) with data from PerfumeViewModel (StateFlow)
 - Cart screen: add to cart, quantity +/-, remove item, total price (CartViewModel with StateFlow)
+- Real perfume data from DummyJSON API (Retrofit + PerfumeRepository)
 
 ## Tech
-Kotlin, Jetpack Compose, MVVM, Navigation Compose
+Kotlin, Jetpack Compose, MVVM, Navigation Compose,  Retrofit, Gson

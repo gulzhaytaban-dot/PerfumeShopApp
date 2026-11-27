@@ -10,7 +10,8 @@ data class Perfume(
     val price: Double,
     val notes: String,
     val volumeMl: Int,
-    @DrawableRes val imageRes: Int
+    @DrawableRes val imageRes: Int,
+    val imageUrl: String? = null
 ) {
     fun formattedPrice(): String {
         val format = NumberFormat.getIntegerInstance(Locale.forLanguageTag("ru-KZ"))
