@@ -20,4 +20,10 @@ interface CartDao {
 
     @Query("DELETE FROM cart_items WHERE perfumeId = :perfumeId")
     suspend fun delete(perfumeId: Int)
+
+    @Query("SELECT * FROM cart_items WHERE perfumeId = :perfumeId LIMIT 1")
+    suspend fun getById(perfumeId: Int): CartEntity?
+
+    @Query("DELETE FROM cart_items")
+    suspend fun clear()
 }
