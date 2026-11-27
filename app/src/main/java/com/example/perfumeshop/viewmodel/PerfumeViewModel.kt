@@ -23,6 +23,7 @@ class PerfumeViewModel(
     }
 
     fun retry() {
+        _uiState.value = PerfumeUiState.Loading
         loadPerfumes()
     }
 
