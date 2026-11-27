@@ -25,4 +25,18 @@ class CartRepository(private val dao: CartDao) {
     suspend fun remove(perfumeId: Int) = dao.delete(perfumeId)
 
     suspend fun clear() = dao.clear()
+
+    suspend fun increase(perfumeId: Int) {
+        val existing = dao.getById(perfumeId) ?: return
+        dao.updateQuantity(perfumeId, existing.quantity + 1)
+    }
+
+    suspend fun decrease(perfumeId: Int) {
+        val existing = dao.getById(perfumeId) ?: return
+        if (existing.quantity > 1) {
+            dao.updateQuantity(perfumeId, existing.quantity - 1)
+        } else {
+            dao.delete(perfumeId)
+        }
+    }
 }
