@@ -49,7 +49,10 @@ fun CartItemRow(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource(item.perfume.imageRes),
+                painter = painterResource(
+                    id = item.perfume.imageRes.takeIf { it != 0 }
+                        ?: android.R.drawable.ic_menu_gallery
+                ),
                 contentDescription = item.perfume.name,
                 modifier = Modifier
                     .size(80.dp)
