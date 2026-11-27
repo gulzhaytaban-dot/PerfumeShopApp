@@ -27,6 +27,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.perfumeshop.ui.state.PerfumeUiState
 import com.example.perfumeshop.viewmodel.PerfumeViewModel
+import androidx.compose.ui.text.style.TextOverflow
 
 @Composable
 fun DetailScreen(
