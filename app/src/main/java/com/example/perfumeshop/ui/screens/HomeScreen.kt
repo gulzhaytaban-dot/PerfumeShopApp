@@ -136,11 +136,16 @@ fun HomeContent(
 
 @Preview(showBackground = true)
 @Composable
-fun HomeContentPreview() {
+fun ErrorContentPreview() {
     PerfumeShopTheme {
-        HomeContent(
-            perfumes = PerfumeData.perfumes,
-            onPerfumeClick = {}
-        )
+        ErrorContent(message = "Unable to resolve host", onRetry = {})
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun EmptyContentPreview() {
+    PerfumeShopTheme {
+        EmptyContent()
     }
 }
