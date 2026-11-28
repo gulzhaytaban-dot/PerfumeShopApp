@@ -20,3 +20,9 @@ A shopping app for one category: perfume. Users can browse perfumes, view detail
 
 ## Tech
 Kotlin, Jetpack Compose, MVVM, Navigation Compose,  Retrofit, Gson
+
+## Local storage (Room)
+- `CartEntity` — cart row (perfume data + quantity)
+- `CartDao` — insert, getAll (Flow), getById, updateQuantity, delete, clear
+- `AppDatabase` — Room database `perfume_shop.db`
+- `CartRepository` — maps entities to `CartItem` and exposes `items: Flow`
