@@ -1,24 +1,13 @@
 package com.example.perfumeshop.navigation
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -27,11 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
@@ -43,7 +28,9 @@ import androidx.navigation.navArgument
 import com.example.perfumeshop.data.local.AppDatabase
 import com.example.perfumeshop.data.repository.CartRepository
 import com.example.perfumeshop.ui.screens.CartScreen
+import com.example.perfumeshop.ui.screens.DetailScreen
 import com.example.perfumeshop.ui.screens.HomeScreen
+import com.example.perfumeshop.ui.state.PerfumeUiState
 import com.example.perfumeshop.viewmodel.CartViewModel
 import com.example.perfumeshop.viewmodel.PerfumeViewModel
 
@@ -115,10 +102,7 @@ fun AppNavigation(
                                 }
                             }
                         ) {
-                            Icon(
-                                Icons.Default.ShoppingCart,
-                                contentDescription = "Cart"
-                            )
+                            Icon(Icons.Default.ShoppingCart, contentDescription = "Cart")
                         }
                     },
                     label = { Text("Cart") }
@@ -160,85 +144,13 @@ fun AppNavigation(
                     viewModel = perfumeVm,
                     onBack = { navController.popBackStack() },
                     onAddToCart = {
-                        perfumeVm.getPerfumeById(perfumeId)?.let { perfume ->
-                            cartVm.addToCart(perfume)
-                        }
+                        val state = perfumeVm.uiState.value
+                        (state as? PerfumeUiState.Success)
+                            ?.perfumes
+                            ?.find { it.id == perfumeId }
+                            ?.let { perfume -> cartVm.addToCart(perfume) }
                     }
                 )
-            }
-        }
-    }
-}
-
-@Composable
-fun DetailScreen(
-    perfumeId: Int,
-    viewModel: PerfumeViewModel,
-    onBack: () -> Unit,
-    onAddToCart: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    val perfume = viewModel.getPerfumeById(perfumeId)
-
-    Column(modifier = modifier.fillMaxSize()) {
-        IconButton(onClick = onBack) {
-            Icon(
-                Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = "Back"
-            )
-        }
-
-        if (perfume == null) {
-            Text("Perfume not found", modifier = Modifier.padding(16.dp))
-            return@Column
-        }
-
-        Column(
-            modifier = Modifier
-                .padding(16.dp)
-                .verticalScroll(rememberScrollState())
-        ) {
-            Image(
-                painter = painterResource(perfume.imageRes),
-                contentDescription = perfume.name,
-                contentScale = ContentScale.Fit,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(300.dp)
-            )
-
-            Spacer(Modifier.height(16.dp))
-            Text(
-                text = perfume.name,
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold
-            )
-
-            Spacer(Modifier.height(8.dp))
-            Text(
-                text = perfume.formattedPrice(),
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.primary
-            )
-
-            Spacer(Modifier.height(8.dp))
-            Text(
-                text = "Volume: ${perfume.volumeMl} ml",
-                style = MaterialTheme.typography.bodyMedium
-            )
-
-            Spacer(Modifier.height(8.dp))
-            Text(
-                text = "Notes: ${perfume.notes}",
-                style = MaterialTheme.typography.bodyMedium
-            )
-
-            Spacer(Modifier.height(24.dp))
-            Button(
-                onClick = onAddToCart,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Add to cart")
             }
         }
     }

@@ -1,6 +1,5 @@
 package com.example.perfumeshop.ui.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,11 +20,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.perfumeshop.data.CartItem
 import com.example.perfumeshop.data.PerfumeData
 import com.example.perfumeshop.ui.theme.PerfumeShopTheme
@@ -39,6 +41,10 @@ fun CartItemRow(
     onRemove: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val imageModel = item.perfume.imageUrl?.takeIf { it.isNotBlank() }
+        ?: item.perfume.imageRes.takeIf { it != 0 }
+    val imagePlaceholder = painterResource(android.R.drawable.ic_menu_gallery)
+
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
@@ -48,18 +54,22 @@ fun CartItemRow(
             modifier = Modifier.padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
-                painter = painterResource(
-                    id = item.perfume.imageRes.takeIf { it != 0 }
-                        ?: android.R.drawable.ic_menu_gallery
-                ),
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(imageModel)
+                    .crossfade(true)
+                    .build(),
                 contentDescription = item.perfume.name,
+                fallback = imagePlaceholder,
+                error = imagePlaceholder,
                 modifier = Modifier
                     .size(80.dp)
                     .clip(RoundedCornerShape(12.dp)),
                 contentScale = ContentScale.Crop
             )
+
             Spacer(modifier = Modifier.width(12.dp))
+
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = item.perfume.name,
@@ -75,6 +85,7 @@ fun CartItemRow(
                     color = MaterialTheme.colorScheme.primary
                 )
                 Spacer(modifier = Modifier.height(8.dp))
+
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     IconButton(onClick = onDecrease) {
                         Text(text = "-", style = MaterialTheme.typography.titleLarge)
@@ -89,6 +100,7 @@ fun CartItemRow(
                     }
                 }
             }
+
             Column(horizontalAlignment = Alignment.End) {
                 Text(
                     text = formatPrice(item.totalPrice),
