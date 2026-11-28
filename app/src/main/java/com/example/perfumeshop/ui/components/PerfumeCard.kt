@@ -1,5 +1,6 @@
 package com.example.perfumeshop.ui.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -14,13 +15,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
 import com.example.perfumeshop.data.Perfume
+import com.example.perfumeshop.data.PerfumeData
+import com.example.perfumeshop.ui.theme.PerfumeShopTheme
 
 @Composable
 fun PerfumeCard(
@@ -35,11 +37,8 @@ fun PerfumeCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Column {
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(perfume.imageUrl)
-                    .crossfade(true)
-                    .build(),
+            Image(
+                painter = painterResource(perfume.imageRes),
                 contentDescription = perfume.name,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -62,5 +61,16 @@ fun PerfumeCard(
                 )
             }
         }
+    }
+}
+@Preview(showBackground = true)
+@Composable
+fun PerfumeCardPreview() {
+    PerfumeShopTheme {
+        PerfumeCard(
+            perfume = PerfumeData.perfumes.first(),
+            onClick = {},
+            modifier = Modifier.padding(16.dp)
+        )
     }
 }
