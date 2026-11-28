@@ -1,65 +1,62 @@
 package com.example.perfumeshop.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.example.perfumeshop.data.CartItem
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.perfumeshop.data.Perfume
-import kotlinx.coroutines.flow.MutableStateFlow
+import com.example.perfumeshop.data.repository.CartRepository
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
-class CartViewModel : ViewModel() {
+class CartViewModel(
+    private val repository: CartRepository
+) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(CartUiState())
-    val uiState: StateFlow<CartUiState> = _uiState.asStateFlow()
+    private val cartWriteMutex = Mutex()
+
+    val uiState: StateFlow<CartUiState> = repository.items
+        .map { items -> CartUiState(items = items) }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = CartUiState()
+        )
 
     fun addToCart(perfume: Perfume) {
-        _uiState.update { state ->
-            val existing = state.items.find { it.perfume.id == perfume.id }
-            val newItems = if (existing == null) {
-                state.items + CartItem(perfume = perfume, quantity = 1)
-            } else {
-                state.items.map {
-                    if (it.perfume.id == perfume.id) it.copy(quantity = it.quantity + 1) else it
-                }
-            }
-            state.copy(items = newItems)
-        }
+        updateCart { repository.add(perfume) }
     }
 
-
     fun increaseQuantity(perfumeId: Int) {
-        _uiState.update { state ->
-            state.copy(
-                items = state.items.map {
-                    if (it.perfume.id == perfumeId) it.copy(quantity = it.quantity + 1) else it
-                }
-            )
-        }
+        updateCart { repository.increase(perfumeId) }
     }
 
     fun decreaseQuantity(perfumeId: Int) {
-        _uiState.update { state ->
-            state.copy(
-                items = state.items.mapNotNull {
-                    when {
-                        it.perfume.id != perfumeId -> it
-                        it.quantity > 1 -> it.copy(quantity = it.quantity - 1)
-                        else -> null
-                    }
-                }
-            )
-        }
+        updateCart { repository.decrease(perfumeId) }
     }
 
-
     fun removeFromCart(perfumeId: Int) {
-        _uiState.update { state ->
-            state.copy(items = state.items.filterNot { it.perfume.id == perfumeId })
-        }
+        updateCart { repository.remove(perfumeId) }
     }
 
     fun clearCart() {
-        _uiState.value = CartUiState()
+        updateCart { repository.clear() }
+    }
+
+    private fun updateCart(action: suspend () -> Unit) {
+        viewModelScope.launch {
+            cartWriteMutex.withLock { action() }
+        }
+    }
+
+    companion object {
+        fun factory(repository: CartRepository) = viewModelFactory {
+            initializer { CartViewModel(repository) }
+        }
     }
 }
